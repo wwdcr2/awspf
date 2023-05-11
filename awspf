@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function awspf() {
+  if [[ "$1" == "--help" ]]; then
+    echo "Usage:"
+    echo "  awspf                : List of My AWS Profile (which located in '~/.aws/credentials')"
+    echo "  awspf [profile_name] : Switch Current Shell's Profile to [profile_name]"
+  else
+    if [[ -z "$1" ]]; then
+      echo "--------------------------------"
+      echo "Current Profile : $AWS_PROFILE"
+      echo "--------------------------------"
+      grep '\[' ~/.aws/credentials | sed 's/\[//g;s/\]//'
+      echo "--------------------------------"
+    else
+      if grep -q "\[$1\]" ~/.aws/credentials; then
+        export AWS_PROFILE="$1"
+        echo "[AWS_PROFILE] changed to [$1] successfully !!"
+      else
+        echo "Invalid profile name."
+      fi
+    fi
+  fi
+}
+
+awspf "$@"
